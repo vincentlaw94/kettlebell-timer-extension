@@ -1,0 +1,23 @@
+{
+  "manifest_version": 3,
+  "name": "Kettlebell Circuit Timer",
+  "version": "1.0.0",
+  "description": "Runs a rounds/work/rest timer over an Instagram carousel workout post, advancing slides automatically.",
+  "permissions": ["storage"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://www.instagram.com/p/*"],
+      "js": ["selectors.js", "overlay.js", "content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["overlay.css"],
+      "matches": ["https://www.instagram.com/*"]
+    }
+  ]
+}
