@@ -42,6 +42,15 @@ const KBOverlay = (() => {
     return `${m}:${String(rem).padStart(2, '0')}`;
   }
 
+  // Elapsed time (not a countdown) — round to the nearest second rather
+  // than always rounding up.
+  function fmtElapsed(ms) {
+    const s = Math.max(0, Math.round(ms / 1000));
+    const m = Math.floor(s / 60);
+    const rem = s % 60;
+    return `${m}:${String(rem).padStart(2, '0')}`;
+  }
+
   function showIdle(config, onStart) {
     ensureMounted();
     setScrim(false);
@@ -95,12 +104,14 @@ const KBOverlay = (() => {
     `;
   }
 
-  function showDone() {
+  function showDone(totalElapsedMs) {
     ensureMounted();
     setScrim(false);
     els.root.className = 'kb-box kb-active kb-done';
     els.root.innerHTML = `
       <div class="kb-phase">DONE</div>
+      <div class="kb-meta">Total time</div>
+      <div class="kb-countdown">${fmtElapsed(totalElapsedMs)}</div>
       <div class="kb-hint">Esc to reset</div>
     `;
   }

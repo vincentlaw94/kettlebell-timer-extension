@@ -84,6 +84,8 @@
       phaseEndsAt: Date.now() + config.workSeconds * 1000,
       pausedRemainingMs: null,
       hasMoreRounds: null,
+      startedAt: Date.now(),
+      totalElapsedMs: null,
       config,
     });
     render();
@@ -171,7 +173,12 @@
       } else {
         beep(440, 180);
         stopTicking();
-        saveState({ ...state, phase: 'done', phaseEndsAt: null });
+        saveState({
+          ...state,
+          phase: 'done',
+          phaseEndsAt: null,
+          totalElapsedMs: Date.now() - state.startedAt,
+        });
       }
     }
     render();
@@ -192,7 +199,7 @@
       return;
     }
     if (state.phase === 'done') {
-      KBOverlay.showDone();
+      KBOverlay.showDone(state.totalElapsedMs);
       return;
     }
     const remainingMs = state.isPaused
